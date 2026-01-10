@@ -1,65 +1,97 @@
-import Image from "next/image";
+import Hero from '@/components/hero';
+import Header from '@/components/header';
+import About from '@/components/about';
+import Skills from '@/components/skills';
+import Experience from '@/components/experience';
+import Projects from '@/components/projects';
+import Certifications from '@/components/certifications';
+import Contact from '@/components/contact';
+import { createClient } from "@/utils/supabase/client";
 
-export default function Home() {
+const supabase = createClient();
+
+const getUserInfo = async () => {
+  let userInfo: any = [];
+
+  try {
+    const { data, error } = await supabase.from("user_info").select("*").single();
+    if (error) {
+      throw error;
+    }
+
+    userInfo = {
+      name: data.name,
+      title: data.title,
+      links: data.links,
+      description: data.description,
+    };
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+  }
+
+  return userInfo;
+}
+
+const getSkills = async () => {
+  let skills = [];
+
+  try {
+    const { data, error } = await supabase.from("skills").select("*");
+    if (error) {
+      throw error;
+    }
+    skills = data;
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+  }
+
+  return skills;
+}
+
+const getExperience = async () => {
+  let experiences = [];
+  try {
+    const { data, error } = await supabase.from("experiences").select("*");
+    if (error) {
+      throw error;
+    }
+    experiences = data;
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+  }
+  return experiences;
+};
+
+const getProjects = async () => {
+  let projects = [];
+  try {
+    const { data, error } = await supabase.from("projects").select("*");
+    if (error) {
+      throw error;
+    }
+    projects = data;
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+  }
+  return projects;
+};
+
+export default async function Main() {
+  const user = await getUserInfo();
+  const skills = await getSkills();
+  const experiences = await getExperience();
+  const projects = await getProjects();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main>
+      <Header />
+      <Hero user={user} />
+      <About description={user.description} />
+      <Skills skills={skills} />
+      <Experience experiences={experiences} />
+      <Projects projects={projects} />
+      <Certifications />
+      <Contact />
+    </main>
   );
 }
