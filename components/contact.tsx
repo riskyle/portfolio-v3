@@ -10,9 +10,9 @@ import { toast } from "sonner";
 import emailjs from '@emailjs/browser';
 
 export default function Contact() {
-    const EMAILJS_SERVICE_ID = process.env.VITE_EMAILJS_SERVICE_ID;
-    const EMAILJS_TEMPLATE_ID = process.env.VITE_EMAILJS_TEMPLATE_ID;
-    const EMAILJS_PUBLIC_KEY = process.env.VITE_EMAILJS_PUBLIC_KEY;
+    const EMAILJS_SERVICE_ID: string = process.env.VITE_EMAILJS_SERVICE_ID ?? "";
+    const EMAILJS_TEMPLATE_ID: string = process.env.VITE_EMAILJS_TEMPLATE_ID ?? "";
+    const EMAILJS_PUBLIC_KEY: string = process.env.VITE_EMAILJS_PUBLIC_KEY ?? "";
 
     const [name, setName] = useState({
         firstname: "",
